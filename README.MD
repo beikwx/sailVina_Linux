@@ -1,0 +1,2 @@
+sailVina用于Linux的自动对接脚本
+Ubuntu下首先执行sudo apt install autodock-vina安装vina再进行对接
