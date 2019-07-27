@@ -1,7 +1,7 @@
-import os
 import sys
 
-import check
+from check import *
+from dock_processor import batch_dock
 
 
 class Main:
@@ -12,31 +12,17 @@ class Main:
 
     def run(self):
         # 1.读取命令行输入
-        if not check.check_cmd_para(sys.argv):
+        if not check_cmd_para(sys.argv):
             sys.exit()
         else:
             self.ligand = sys.argv[1]
             self.proteins_dir = sys.argv[2]
 
-        print("ligand = " + self.ligand)
-        print("proteins = " + self.proteins_dir)
+        print("选定的配体是：" + self.ligand)
+        print("选定的受体目录是：" + self.proteins_dir)
 
         # 2.进行对接
-        protein = self.proteins_dir + os.sep + "preped.pdbqt"
-        config = self.proteins_dir + os.sep + "config.txt"
-
-        # windows版本
-        # cmd = "." + os.sep + "sources" + os.sep + "vina.exe --ligand %s " \
-        #                                           "--receptor %s " \
-        #                                           "--config %s" % \
-        #       (self.ligand, protein, config)
-
-        # linux版本
-        cmd = "vina --ligand %s --receptor %s --config %s" % \
-              (self.ligand, protein, config)
-
-        # print(cmd)
-        os.system(cmd)
+        batch_dock(self.ligand, self.proteins_dir)
 
 
 if __name__ == '__main__':
