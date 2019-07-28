@@ -25,5 +25,14 @@ def get_proteins(proteins_dir):
     return receptors
 
 
+def get_pdb_box(pdb_file_path):
+    """
+
+    :param pdb_file_path: pdb或者pdbqt文件路径名
+    :return: 中心x坐标，中心y坐标，中心z坐标，长，宽，高。
+    """
+    pass
+
+
 if __name__ == '__main__':
     proteins2dir(r".\Proteins")

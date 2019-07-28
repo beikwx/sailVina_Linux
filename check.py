@@ -35,10 +35,10 @@ def check_dir(filename):
         if os.path.exists(filename):
             return 1
         else:
-            print("文件夹不存在")
+            print(filename + "不存在")
             return 0
     else:
-        print("不是文件夹")
+        print(filename + "不是文件夹")
         return 0
 
 
@@ -46,10 +46,14 @@ def check_file(filename):
     """
 
     :param filename: 判断的名字
-    :return: 是文件返回1，不是返回0
+    :return: 是文件返回1，不是返回0。文件不存在返回0
     """
     if os.path.isfile(filename):
-        return 1
+        if os.path.exists(filename):
+            return 1
+        else:
+            print(filename + "不存在")
+            return 0
     else:
         print(filename + "不是文件")
         return 0
