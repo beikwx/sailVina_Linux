@@ -1,16 +1,41 @@
 import os
 from file_processor import pdbqt2dir
 import check
+import math
 
 
 def proteins2dir(proteins_dir):
-    receptors = get_proteins(proteins_dir)
+    receptors = __get_proteins(proteins_dir)
     for receptor in receptors:
         pdbqt_path = proteins_dir + os.sep + receptor
         pdbqt2dir(pdbqt_path)
 
 
-def get_proteins(proteins_dir):
+def gen_config(protein, ligand):
+    """
+    根据受体和配体生成config文件
+    :param protein: 蛋白路径
+    :param ligand: 配体路径
+    """
+    # 获取受体的盒子
+    protein_box = __get_pdb_box(protein)
+    # 获取配体的盒子
+    ligand_box = __get_pdb_box(ligand, file_type="ligand")
+
+    # 定义对接最大的盒子
+    config_box_size = 30.0
+
+    print(protein_box)
+    print(ligand_box)
+
+    # x方向需要的盒子
+    x_count = math.ceil((protein_box[3] + ligand_box[3]) / (config_box_size - ligand_box[3]))
+    y_count = math.ceil((protein_box[4] + ligand_box[4]) / (config_box_size - ligand_box[3]))
+    z_count = math.ceil((protein_box[5] + ligand_box[5]) / (config_box_size - ligand_box[3]))
+    print(x_count, y_count, z_count)
+
+
+def __get_proteins(proteins_dir):
     """
 
     :param proteins_dir: 受体目录，其中是pdbqt的受体文件
@@ -26,11 +51,11 @@ def get_proteins(proteins_dir):
     return receptors
 
 
-def get_pdb_box(pdb_file_path, type="protein"):
+def __get_pdb_box(pdb_file_path, file_type="protein"):
     """
     计算蛋白或者配体的空间中心坐标和最大立方体长宽高。
     :param pdb_file_path: pdb或者pdbqt文件路径名
-    :param type:输入的格式类型，默认为蛋白，设置为ligand则为小分子
+    :param file_type:输入的格式类型，默认为蛋白，设置为ligand则为小分子
     :return: 中心x坐标，中心y坐标，中心z坐标，长，宽，高。
     """
     # 保证文件存在
@@ -42,12 +67,12 @@ def get_pdb_box(pdb_file_path, type="protein"):
     atoms_z_list = []
 
     # 额外距离
-    extra_distance = 3
+    extra_distance = 0
 
     # 判断参数类型
-    if type == "protein":
+    if file_type == "protein":
         atom_marker = "ATOM"
-    elif type == "ligand":
+    elif file_type == "ligand":
         atom_marker = "HETATM"
     else:
         print("参数不正确")
@@ -79,6 +104,8 @@ def get_pdb_box(pdb_file_path, type="protein"):
 
 
 if __name__ == '__main__':
-    # box = get_pdb_box(r"./Proteins/pdb2/preped.pdbqt")
-    box = get_pdb_box(r"./Ligands/aspirin.pdbqt", type="ligand")
-    print(box)
+    # # box = get_pdb_box(r"./Proteins/pdb2/preped.pdbqt")
+    # box = __get_pdb_box(r"./Ligands/aspirin.pdbqt", file_type="ligand")
+    # print(box)
+
+    gen_config(r"./Proteins/pdb1/preped.pdbqt", r"./Ligands/aspirin.pdbqt")
