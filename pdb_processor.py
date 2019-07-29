@@ -3,6 +3,7 @@ from file_processor import pdbqt2dir
 from file_processor import gen_config_file
 import check
 import math
+import sys
 
 
 def proteins2dir(proteins_dir):
@@ -132,7 +133,8 @@ def __get_pdb_box(pdb_file_path, file_type="protein"):
     """
     # 保证文件存在
     if not check.check_file(pdb_file_path):
-        return
+        print(pdb_file_path + "不存在")
+        sys.exit()
 
     atoms_x_list = []
     atoms_y_list = []
@@ -162,7 +164,7 @@ def __get_pdb_box(pdb_file_path, file_type="protein"):
 
     if len(atoms_x_list) == 0:
         print("没有检测到原子")
-        return
+        sys.exit()
 
     box_center_x = round(sum(atoms_x_list) / len(atoms_x_list), 3)
     box_center_y = round(sum(atoms_y_list) / len(atoms_y_list), 3)
