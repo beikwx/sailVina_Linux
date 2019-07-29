@@ -3,6 +3,7 @@ import sys
 from check import *
 from dock_processor import batch_dock
 from pdb_processor import proteins2dir
+from pdb_processor import gen_config
 
 
 class Main:
@@ -14,6 +15,7 @@ class Main:
     def run(self):
 
         # 1.读取命令行输入
+        # 例如输入 main.py ./Proteins ./Ligands/aspirin.pdbqt
         if not check_cmd_para(sys.argv):
             sys.exit()
         else:
@@ -24,10 +26,13 @@ class Main:
         print("选定的受体目录是：" + self.proteins_dir)
 
         # 2.将pdbqt文件放入文件夹
-        proteins2dir(self.proteins_dir)
+        # 此时受体目录"./Proteins/pdb/preped.pdbqt
+        receptors_dir = proteins2dir(self.proteins_dir)
 
-        # Todo 3.生成config.txt文件。
-        # 确定对接位点，可能会生成多个config文件
+        # 3.生成config.txt文件。
+        for receptor_dir in receptors_dir:
+            receptor_file = receptor_dir + os.sep + "preped.pdbqt"
+            gen_config(receptor_file, self.ligand)
 
         # Todo 4.进行对接
         # 多个配置文件分别对接

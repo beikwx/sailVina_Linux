@@ -1,21 +1,48 @@
 import os
 from file_processor import pdbqt2dir
+from file_processor import gen_config_file
 import check
 import math
 
 
 def proteins2dir(proteins_dir):
+    """
+    将指定受体文件夹中的受体移动到以受体命名的文件夹中，将受体重命名为"preped.pdbqt"
+    :param proteins_dir: 包含pdbqt受体的目录
+    :return:生成的受体目录
+    """
     receptors = __get_proteins(proteins_dir)
+    receptors_dir = []
     for receptor in receptors:
         pdbqt_path = proteins_dir + os.sep + receptor
+        receptors_dir.append(os.path.splitext(pdbqt_path)[0])
         pdbqt2dir(pdbqt_path)
+    return receptors_dir
 
 
 def gen_config(protein, ligand):
     """
-    根据受体和配体生成config文件
+
+    :param protein: 蛋白路径，比如r"./Proteins/pdb1/preped.pdbqt"
+    :param ligand: 配体路径，比如r"./Ligands/aspirin.pdbqt"
+    """
+    x_cos, y_cos, z_cos, size = __gen_config_boxes(protein, ligand)
+    count = 1
+    for x in x_cos:
+        for y in y_cos:
+            for z in z_cos:
+                filename = os.path.split(protein)[0] + os.sep + "config" + str(count) + ".txt"
+                # print(filename)
+                gen_config_file(filename, x, y, z, size)
+                count += 1
+
+
+def __gen_config_boxes(protein, ligand):
+    """
+    根据受体和配体生成多个config的盒子
     :param protein: 蛋白路径
     :param ligand: 配体路径
+    :returns:x,y,z方向的所有坐标，盒子的大小
     """
     # 获取受体的盒子
     protein_box = __get_pdb_box(protein)
@@ -25,14 +52,59 @@ def gen_config(protein, ligand):
     # 定义对接最大的盒子
     config_box_size = 30.0
 
-    print(protein_box)
-    print(ligand_box)
+    # print(protein_box)
+    # print(ligand_box)
 
     # x方向需要的盒子
     x_count = math.ceil((protein_box[3] + ligand_box[3]) / (config_box_size - ligand_box[3]))
     y_count = math.ceil((protein_box[4] + ligand_box[4]) / (config_box_size - ligand_box[3]))
     z_count = math.ceil((protein_box[5] + ligand_box[5]) / (config_box_size - ligand_box[3]))
-    print(x_count, y_count, z_count)
+    # print(x_count, y_count, z_count)
+
+    x_coordinates = []
+    y_coordinates = []
+    z_coordinates = []
+
+    # 求config盒子的X坐标合集
+    i = 0
+    max_x = (protein_box[0] + 0.5 * protein_box[3] + ligand_box[3]) - 0.5 * config_box_size
+    while i < x_count:
+        x = (protein_box[0] - 0.5 * protein_box[3] - ligand_box[3]) + 0.5 * config_box_size + (
+                config_box_size - ligand_box[3]) * i
+        if x <= max_x:
+            x_coordinates.append(round(x, 2))
+        else:
+            x_coordinates.append(round(max_x, 2))
+        i += 1
+
+    # 求config盒子的Y坐标合集
+    i = 0
+    min_y = (protein_box[1] - 0.5 * protein_box[4] - ligand_box[4]) + 0.5 * config_box_size
+    while i < y_count:
+        y = (protein_box[1] + 0.5 * protein_box[4] + ligand_box[4]) - 0.5 * config_box_size - (
+                config_box_size - ligand_box[4]) * i
+        if y >= min_y:
+            y_coordinates.append(round(y, 2))
+        else:
+            y_coordinates.append(round(min_y, 2))
+        i += 1
+
+    # 求config盒子的Z坐标合集
+    i = 0
+    min_z = (protein_box[2] - 0.5 * protein_box[5] - ligand_box[5]) + 0.5 * config_box_size
+    while i < z_count:
+        z = (protein_box[2] + 0.5 * protein_box[5] + ligand_box[5]) - 0.5 * config_box_size - (
+                config_box_size - ligand_box[5]) * i
+        if z >= min_z:
+            z_coordinates.append(round(z, 2))
+        else:
+            z_coordinates.append(round(min_z, 2))
+        i += 1
+
+    # print(x_coordinates)
+    # print(y_coordinates)
+    # print(z_coordinates)
+    return x_coordinates, y_coordinates, z_coordinates, config_box_size
 
 
 def __get_proteins(proteins_dir):
@@ -107,5 +179,6 @@ if __name__ == '__main__':
     # # box = get_pdb_box(r"./Proteins/pdb2/preped.pdbqt")
     # box = __get_pdb_box(r"./Ligands/aspirin.pdbqt", file_type="ligand")
     # print(box)
-
-    gen_config(r"./Proteins/pdb1/preped.pdbqt", r"./Ligands/aspirin.pdbqt")
+    # gen_config(r".\Proteins\pdb1\preped.pdbqt", r".\Ligands\aspirin.pdbqt")
+    dirs = proteins2dir(r".\Proteins")
+    print(dirs)
