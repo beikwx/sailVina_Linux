@@ -119,8 +119,10 @@ def __get_proteins(proteins_dir):
     for protein in proteins:
         if protein.endswith(".pdbqt"):
             receptors.append(protein)
+
+    print("------------------------------------------------------------")
     print("发现受体pdbqt文件" + str(len(receptors)) + "个")
-    print("开始准备文件.........")
+    print("开始移动文件")
     return receptors
 
 

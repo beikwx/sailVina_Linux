@@ -38,13 +38,34 @@ def gen_config_file(output_name, x, y, z, size):
     with open(output_name, "w") as f:
         f.writelines("center_x = " + str(x) + "\n")
         f.writelines("center_y = " + str(y) + "\n")
-        f.writelines("center_x = " + str(z) + "\n")
+        f.writelines("center_z = " + str(z) + "\n")
         f.writelines("size_x = " + str(size) + "\n")
+        f.writelines("size_y = " + str(size) + "\n")
+        f.writelines("size_z = " + str(size) + "\n")
         f.writelines("exhaustiveness = " + exhaustiveness + "\n")
         f.writelines("num_modes = " + num_modes + "\n")
         f.writelines("energy_range = " + energy_range + "\n")
 
 
+def get_config_files(protein_path):
+    """
+
+    :param protein_path: 蛋白文件夹路径，比如"./Proteins/01"
+    :return: 蛋白的config文件
+    """
+    files = os.listdir(protein_path)
+    config_files = []
+    for file in files:
+        if file.startswith("config"):
+            config_files.append(protein_path + os.sep + file)
+    return config_files
+
+
+def mk_output_dir(output_path):
+    os.mkdir(output_path)
+
+
 if __name__ == '__main__':
     # pdbqt2dir("./Proteins/pdb (1).pdbqt")
-    gen_config_file("./config.txt", 1, 1, 1, 20)
+    # gen_config_file("./config.txt", 1, 1, 1, 20)
+    get_config_files(r".\Proteins\01")
