@@ -55,7 +55,7 @@ class Main:
             config_files = get_config_files(receptor_dir)
 
             # 创建输出文件夹
-            output_dir = r".\Output" + os.sep + receptor_dir.split(os.sep)[-1]
+            output_dir = "." + os.sep + "Output" + os.sep + receptor_dir.split(os.sep)[-1]
             mk_output_dir(output_dir)
 
             output_count = 0
