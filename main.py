@@ -4,8 +4,10 @@ from check import *
 from dock_processor import vina_dock
 from pdb_processor import proteins2dir
 from pdb_processor import gen_config
-from file_processor import get_config_files
+from file_processor import get_config_files, create_scores_file
 from file_processor import mk_output_dir
+from file_processor import get_best_scores
+from Tools.read_scores import read_root_folder_scores
 
 
 class Main:
@@ -70,9 +72,9 @@ class Main:
             print("对接完毕：" + current_receptor)
             print("------------------------------------------------------------")
 
-        # Todo 5.结果分析
-        # 对所有输出文件进行汇总，同一类的多个对接结果算一个
-        # 输出所有分数(txt/excel)
+        # 5.结果分析，输出分数最低的结果
+        best_dict = get_best_scores(read_root_folder_scores("." + os.sep + "Output", mode=1))
+        create_scores_file("..\\Output\\output.txt", best_dict)
 
         # Todo 6.提取结果
         # 从确定的n个结果中输出（配体/受体/复合物）
