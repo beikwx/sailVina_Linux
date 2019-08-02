@@ -1,6 +1,7 @@
 import os
 from file_processor import create_scores_file
 from file_processor import get_best_scores
+import sys
 
 
 def read_root_folder_scores(output_root_folder_path, mode=0):
@@ -60,12 +61,20 @@ def read_scores(output_file_path):
 
 
 if __name__ == '__main__':
-    # m_scores = read_scores(r"..\Output\0.pdbqt")
-    # print(m_scores)
-
-    # s_dict = read_folder_scores(r"..\Output\01")
-    # print(s_dict)
-
-    re_dict = read_root_folder_scores(r"..\Output", mode=1)
-    best_dict = get_best_scores(re_dict)
-    create_scores_file("..\\Output\\output.txt", best_dict)
+    # 读取命令行输入
+    if len(sys.argv) == 1:
+        print("--------------------------------------------------------------------------------")
+        print('命令格式:\n'
+              'python .\\read_scores.py 对接结果输出根目录 结果输出目录\n\n'
+              '其中:\n'
+              '对接结果输出根目录：对接之后结果所在的目录，比如..\\Output\n'
+              '结果输出目录:输出txt文件的位置，比如..\\Output')
+        print("--------------------------------------------------------------------------------")
+        sys.exit()
+    elif len(sys.argv) != 3:
+        print("参数个数不正确，请检查参数！")
+        sys.exit()
+    else:
+        re_dict = read_root_folder_scores(sys.argv[1], mode=1)
+        best_dict = get_best_scores(re_dict)
+        create_scores_file(sys.argv[2] + os.sep + "scores.txt", best_dict)
