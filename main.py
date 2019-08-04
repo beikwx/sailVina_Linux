@@ -76,9 +76,6 @@ class Main:
         best_dict = get_best_scores(read_root_folder_scores("." + os.sep + "Output", mode=1))
         create_scores_file("." + os.sep + "Output" + os.sep + "output.txt", best_dict)
 
-        # Todo 6.提取结果
-        # 从确定的n个结果中输出（配体/受体/复合物）
-
 
 if __name__ == '__main__':
     main = Main()

@@ -48,7 +48,7 @@ def __gen_config_boxes(protein, ligand):
     # 获取受体的盒子
     protein_box = __get_pdb_box(protein)
     # 获取配体的盒子
-    ligand_box = __get_pdb_box(ligand, file_type="ligand")
+    ligand_box = __get_pdb_box(ligand)
 
     # 定义对接最大的盒子
     config_box_size = 30.0
@@ -126,11 +126,10 @@ def __get_proteins(proteins_dir):
     return receptors
 
 
-def __get_pdb_box(pdb_file_path, file_type="protein"):
+def __get_pdb_box(pdb_file_path):
     """
     计算蛋白或者配体的空间中心坐标和最大立方体长宽高。
     :param pdb_file_path: pdb或者pdbqt文件路径名
-    :param file_type:输入的格式类型，默认为蛋白，设置为ligand则为小分子
     :return: 中心x坐标，中心y坐标，中心z坐标，长，宽，高。
     """
     # 保证文件存在
@@ -145,20 +144,11 @@ def __get_pdb_box(pdb_file_path, file_type="protein"):
     # 额外距离
     extra_distance = 0
 
-    # 判断参数类型
-    if file_type == "protein":
-        atom_marker = "ATOM"
-    elif file_type == "ligand":
-        atom_marker = "HETATM"
-    else:
-        print("参数不正确")
-        return
-
     # 读取所有非H原子的坐标
     with open(pdb_file_path) as f:
         lines = f.readlines()
         for line in lines:
-            if line.startswith(atom_marker):
+            if line.startswith("ATOM") or line.startswith("HETATM"):
                 if line[13:14] != "H":
                     atoms_x_list.append(float(line[30:38]))
                     atoms_y_list.append(float(line[38:46]))
@@ -180,9 +170,13 @@ def __get_pdb_box(pdb_file_path, file_type="protein"):
 
 
 if __name__ == '__main__':
-    # # box = get_pdb_box(r"./Proteins/pdb2/preped.pdbqt")
+    pass
+    # 本地调试代码
+    # box = get_pdb_box(r"./Proteins/pdb2/preped.pdbqt")
     # box = __get_pdb_box(r"./Ligands/aspirin.pdbqt", file_type="ligand")
     # print(box)
     # gen_config(r".\Proteins\pdb1\preped.pdbqt", r".\Ligands\aspirin.pdbqt")
-    dirs = proteins2dir(r".\Proteins")
-    print(dirs)
+    # dirs = proteins2dir(r".\Proteins")
+    # print(dirs)
+    # print(__gen_config_boxes("D:\\下载\\pdbbind_v2018_other_PL\\v2018-other-PL\\1a0t\\1a0t_pocket.pdb",
+    #                          "D:\\Desktop\\1a0t_ligand.pdbqt"))

@@ -108,9 +108,11 @@ def get_best_scores(scores_dict):
 
 
 if __name__ == '__main__':
+    pass
+    # 本地调试代码
     # pdbqt2dir("./Proteins/pdb (1).pdbqt")
     # gen_config_file("./config.txt", 1, 1, 1, 20)
     # get_config_files(r".\Proteins\01")
-    r_dict = {'01': {'0.pdbqt': '-3.2', '1.pdbqt': '-3.1', '2.pdbqt': '-3.5'},
-              '02': {'0.pdbqt': '-3.2', '1.pdbqt': '-3.2', '2.pdbqt': '-3.2'}}
-    print(get_best_scores(r_dict))
+    # r_dict = {'01': {'0.pdbqt': '-3.2', '1.pdbqt': '-3.1', '2.pdbqt': '-3.5'},
+    #           '02': {'0.pdbqt': '-3.2', '1.pdbqt': '-3.2', '2.pdbqt': '-3.2'}}
+    # print(get_best_scores(r_dict))
