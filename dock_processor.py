@@ -18,5 +18,7 @@ def vina_dock(ligand, protein, config, output):
 
 
 if __name__ == '__main__':
-    vina_dock(r".\Ligands\aspirin.pdbqt", r".\Proteins\01\preped.pdbqt", r".\Proteins\01\config1.txt",
-              r".\Output\01\01.pdbqt")
+    pass
+    # 本地调试代码
+    # vina_dock(r".\Ligands\aspirin.pdbqt", r".\Proteins\01\preped.pdbqt", r".\Proteins\01\config1.txt",
+    #           r".\Output\01\01.pdbqt")
