@@ -1,7 +1,11 @@
 import os
+import sys
+
+# 添加包路径
+sys.path.append("..")
+
 from file_processor import create_scores_file
 from file_processor import get_best_scores
-import sys
 
 
 def read_root_folder_scores(output_root_folder_path, mode=0):
