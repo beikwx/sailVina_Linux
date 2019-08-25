@@ -4,7 +4,6 @@
 """
 
 import os
-import os as os1
 import sys
 
 
@@ -35,8 +34,8 @@ def prepare_receptors(mgl_dir, receptors_path, output_dir):
 
     i = 0
     while i < len(receptors_name):
-        input_file = receptors_path + os1.sep + receptors_name[i]
-        output_file = output_dir + os1.sep + receptors_name[i].split(".")[0] + ".pdbqt"
+        input_file = receptors_path + os.sep + receptors_name[i]
+        output_file = output_dir + os.sep + receptors_name[i].split(".")[0] + ".pdbqt"
         print("--------------------开始准备受体--------------------")
         print("当前输入文件" + input_file)
         cmd = "%s %s -r %s -o %s -A -e" % (mgl_python_path, prepare_receptor4_path, input_file, output_file)
