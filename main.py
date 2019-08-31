@@ -73,8 +73,9 @@ class Main:
             print("------------------------------------------------------------")
 
         # 5.结果分析，输出分数最低的结果
-        best_dict = get_best_scores(read_root_folder_scores("." + os.sep + "Output", mode=1))
-        create_scores_file("." + os.sep + "Output" + os.sep + "output.txt", best_dict)
+        scores = read_root_folder_scores("." + os.sep + "Output", mode=1)
+        best_score = get_best_scores(scores)
+        create_scores_file("." + os.sep + "Output" + os.sep + "output.txt", best_score)
 
 
 if __name__ == '__main__':
