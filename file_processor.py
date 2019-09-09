@@ -81,7 +81,12 @@ def create_scores_file(output_file, scores_dict):
         f.write("receptor_name\tligand_name\tscores\n")
         for receptor in scores_dict:
             for ligand in scores_dict[receptor]:
-                f.write(receptor + "\t" + ligand + "\t" + scores_dict[receptor][ligand] + "\n")
+                # 如果列表只有一个元素
+                if not isinstance(scores_dict[receptor][ligand], list):
+                    f.write(receptor + "\t" + ligand + "\t" + scores_dict[receptor][ligand] + "\n")
+                else:
+                    for score in scores_dict[receptor][ligand]:
+                        f.write(receptor + "\t" + ligand + "\t" + score + "\n")
 
 
 def get_best_scores(scores_dict):
