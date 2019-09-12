@@ -20,7 +20,7 @@ def pdbqt2dir(pdbqt_path):
 
 
 def read_para(para_name):
-    with open("para.txt", "r") as f:
+    with open("para.txt", "r", encoding='UTF-8') as f:
         for line in f.readlines():
             if line.startswith(para_name):
                 return line.split("=")[1].strip()
@@ -38,7 +38,7 @@ def gen_config_file(output_name, x, y, z, size):
     exhaustiveness = read_para("exhaustiveness")
     num_modes = read_para("num_modes")
     energy_range = read_para("energy_range")
-    with open(output_name, "w") as f:
+    with open(output_name, "w", encoding='UTF-8') as f:
         f.writelines("center_x = " + str(x) + "\n")
         f.writelines("center_y = " + str(y) + "\n")
         f.writelines("center_z = " + str(z) + "\n")
@@ -79,7 +79,7 @@ def create_scores_file(output_file, scores_dict):
     :param output_file: 输出目录
     :param scores_dict:分数字典
     """
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding='UTF-8') as f:
         f.write("receptor_name\tligand_name\tscores\n")
         for receptor in scores_dict:
             for ligand in scores_dict[receptor]:

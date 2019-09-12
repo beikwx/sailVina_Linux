@@ -147,7 +147,7 @@ def __get_pdb_box(pdb_file_path):
     extra_distance = 0
 
     # 读取所有非H原子的坐标
-    with open(pdb_file_path) as f:
+    with open(pdb_file_path, encoding='UTF-8') as f:
         lines = f.readlines()
         for line in lines:
             if line.startswith("ATOM") or line.startswith("HETATM"):

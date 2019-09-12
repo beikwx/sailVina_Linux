@@ -60,7 +60,7 @@ def read_scores(output_file_path):
     :return: 所有分数的合集
     """
     scores = []
-    with open(output_file_path, "r") as f:
+    with open(output_file_path, "r", encoding='UTF-8') as f:
         for line in f.readlines():
             if line.startswith("REMARK VINA RESULT"):
                 scores.append(line.split()[3])
