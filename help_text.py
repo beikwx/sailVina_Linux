@@ -1,3 +1,5 @@
+# coding: utf-8
+
 INFO = "------------------------------------------------------------\n" \
        "sailVina 1.0 for Linux\n" \
        "Developed by Yuanhang Xiang\n" \

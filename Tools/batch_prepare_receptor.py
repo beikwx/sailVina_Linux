@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 用于批量准备受体文件
 需要mgltool的python路径和文件路径

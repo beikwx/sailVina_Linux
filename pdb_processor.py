@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import os
 from file_processor import pdbqt2dir
 from file_processor import gen_config_file

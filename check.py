@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import help_text
 import os
 
