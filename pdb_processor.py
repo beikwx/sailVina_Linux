@@ -122,9 +122,9 @@ def __get_proteins(proteins_dir):
         if protein.endswith(".pdbqt"):
             receptors.append(protein)
 
-    print("------------------------------------------------------------")
-    print("发现受体pdbqt文件" + str(len(receptors)) + "个")
-    print("开始移动文件")
+    # print("------------------------------------------------------------")
+    # print("发现受体pdbqt文件" + str(len(receptors)) + "个")
+    # print("开始移动文件")
     return receptors
 
 
@@ -136,7 +136,7 @@ def __get_pdb_box(pdb_file_path):
     """
     # 保证文件存在
     if not check.check_file(pdb_file_path):
-        print(pdb_file_path + "不存在")
+        # print(pdb_file_path + "不存在")
         sys.exit()
 
     atoms_x_list = []
@@ -157,7 +157,7 @@ def __get_pdb_box(pdb_file_path):
                     atoms_z_list.append(float(line[46:54]))
 
     if len(atoms_x_list) == 0:
-        print("没有检测到原子")
+        # print("没有检测到原子")
         sys.exit()
 
     box_center_x = round(sum(atoms_x_list) / len(atoms_x_list), 3)

@@ -7,12 +7,9 @@ import os
 def check_cmd_para(cmd_para):
     # 直接运行
     if len(cmd_para) == 1:
-        print(help_text.INFO)
         return 0
     # 参数个数不正确
     elif len(cmd_para) != 3:
-        print("输入的参数个数不正确，请检查命令并重新输入")
-        print(help_text.INFO)
         return 0
     # 检查文件名
     else:
@@ -37,10 +34,8 @@ def check_dir(filename):
         if os.path.exists(filename):
             return 1
         else:
-            print(filename + "不存在")
             return 0
     else:
-        print(filename + "不是文件夹")
         return 0
 
 
@@ -54,10 +49,8 @@ def check_file(filename):
         if os.path.exists(filename):
             return 1
         else:
-            print(filename + "不存在")
             return 0
     else:
-        print(filename + "不是文件")
         return 0
 
 
@@ -70,7 +63,6 @@ def check_format(filename, target_format):
     """
     file_format = os.path.splitext(filename)[-1]
     if file_format != "." + target_format:
-        print(filename + "文件不是" + target_format + "格式")
         return 0
     else:
         return 1

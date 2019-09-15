@@ -71,16 +71,8 @@ def read_scores(output_file_path):
 if __name__ == '__main__':
     # 读取命令行输入
     if len(sys.argv) == 1:
-        print("--------------------------------------------------------------------------------")
-        print('命令格式:\n'
-              'python .\\read_scores.py 对接结果输出根目录 结果输出目录\n\n'
-              '其中:\n'
-              '对接结果输出根目录：对接之后结果所在的目录，比如..\\Output\n'
-              '结果输出目录:输出txt文件的位置，比如..\\Output')
-        print("--------------------------------------------------------------------------------")
         sys.exit()
     elif len(sys.argv) != 3:
-        print("参数个数不正确，请检查参数！")
         sys.exit()
     else:
         re_dict = read_root_folder_scores(sys.argv[1], mode=1)

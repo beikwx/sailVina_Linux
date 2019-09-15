@@ -36,21 +36,21 @@ class Main:
         receptors_dir = proteins2dir(self.proteins_dir)
 
         # 3.生成config.txt文件。
-        print("----------------------------------------准备生成对接配置文件----------------------------------------")
+        # print("----------------------------------------准备生成对接配置文件----------------------------------------")
         for receptor_dir in receptors_dir:
             receptor_file = receptor_dir + os.sep + "preped.pdbqt"
             gen_config(receptor_file, self.ligand)
-        print("----------------------------------------配置文件生成完毕----------------------------------------")
+        # print("----------------------------------------配置文件生成完毕----------------------------------------")
 
-        print("----------------------------------------准备对接----------------------------------------")
+        # print("----------------------------------------准备对接----------------------------------------")
 
         # 4.进行对接
         for receptor_dir in receptors_dir:
             # 此时receptor_dir = ".\Proteins\01
             current_receptor = receptor_dir.split(os.sep)[-1]
-            print("------------------------------------------------------------")
-            print("准备对接：" + current_receptor)
-            print("------------------------------------------------------------")
+            # print("------------------------------------------------------------")
+            # print("准备对接：" + current_receptor)
+            # print("------------------------------------------------------------")
 
             # 受体文件
             receptor_file = receptor_dir + os.sep + "preped.pdbqt"
@@ -65,21 +65,21 @@ class Main:
             output_count = 0
             for config_file in config_files:
                 output_file = output_dir + os.sep + str(output_count) + ".pdbqt"
-                print("当前配置文件:" + config_file)
+                # print("当前配置文件:" + config_file)
                 vina_dock(self.ligand, receptor_file, config_file, output_file)
-                print("------------------------------------------------------------")
+                # print("------------------------------------------------------------")
                 output_count += 1
 
-            print("------------------------------------------------------------")
-            print("对接完毕：" + current_receptor)
-            print("------------------------------------------------------------")
+            # print("------------------------------------------------------------")
+            # print("对接完毕：" + current_receptor)
+            # print("------------------------------------------------------------")
 
         # 5.结果分析，输出分数最低的结果
 
         best_dict = get_best_scores(read_root_folder_scores("." + os.sep + "Output", mode=1))
         score_file = "." + os.sep + "Output" + os.sep + "output.txt"
         create_scores_file(score_file, best_dict)
-        print("输出分数到%s" % score_file)
+        # print("输出分数到%s" % score_file)
 
 
 if __name__ == '__main__':
