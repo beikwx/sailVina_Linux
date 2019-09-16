@@ -19,6 +19,7 @@ def extract_model(input_path, output_path):
         if os.path.isdir(root_name_path):
             # D:\\test\\outputs\\12345\\model
             # D:\\test\\outputs\\12345\\Untitled_Project_2019-07-01\\model
+            # D:\\test\\outputs\\12345\\
             sub_model_folders_path = root_name_path + os.sep + "model"
             if not os.path.exists(sub_model_folders_path):
                 sub_folder = os.listdir(root_name_path)[0]
@@ -31,6 +32,8 @@ def extract_model(input_path, output_path):
                 # D:\\test\\outputs\\12345\\model\\01\\model.pdb
                 model_file = sub_model_folder_path + os.sep + "model.pdb"
                 # D:\\test\\extract\\12345_01.pdb
+                if not os.path.exists(model_file):
+                    continue
                 output_file = output_path + os.sep + root_name + "_" + sub_model_name + ".pdb"
                 shutil.copyfile(model_file, output_file)
 
