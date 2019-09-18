@@ -17,6 +17,7 @@ class Main:
     def __init__(self):
         self.ligand = None
         self.proteins_dir = None
+        self.output_path = None
 
     def run(self):
 
@@ -27,6 +28,7 @@ class Main:
         else:
             self.ligand = sys.argv[1]
             self.proteins_dir = sys.argv[2]
+            self.output_path = sys.argv[3]
 
         # print("选定的配体是：" + self.ligand)
         # print("选定的受体目录是：" + self.proteins_dir)
@@ -59,7 +61,7 @@ class Main:
             config_files = get_config_files(receptor_dir)
 
             # 创建输出文件夹
-            output_dir = "." + os.sep + "Output" + os.sep + receptor_dir.split(os.sep)[-1]
+            output_dir = self.output_path + os.sep + receptor_dir.split(os.sep)[-1]
             mk_output_dir(output_dir)
 
             output_count = 0
@@ -76,8 +78,8 @@ class Main:
 
         # 5.结果分析，输出分数最低的结果
 
-        best_dict = get_best_scores(read_root_folder_scores("." + os.sep + "Output", mode=1))
-        score_file = "." + os.sep + "Output" + os.sep + "output.txt"
+        best_dict = get_best_scores(read_root_folder_scores(self.output_path, mode=1))
+        score_file = self.output_path + os.sep + "output.txt"
         create_scores_file(score_file, best_dict)
         # print("输出分数到%s" % score_file)
 

@@ -172,7 +172,7 @@ def __get_pdb_box(pdb_file_path):
 
 
 if __name__ == '__main__':
-    pass
+    print(sys.getdefaultencoding())
     # 本地调试代码
     # box = get_pdb_box(r"./Proteins/pdb2/preped.pdbqt")
     # box = __get_pdb_box(r"./Ligands/aspirin.pdbqt", file_type="ligand")
