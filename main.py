@@ -1,14 +1,12 @@
 # coding: utf-8
 
-import sys
-
 from check import *
 from dock_processor import vina_dock
 from pdb_processor import proteins2dir
 from pdb_processor import gen_config
 from file_processor import get_config_files, create_scores_file
 from file_processor import mk_output_dir
-from file_processor import get_best_scores
+from file_processor import get_best_scores, copy_proteins
 from Tools.read_scores import read_root_folder_scores
 
 
@@ -22,20 +20,18 @@ class Main:
     def run(self):
 
         # 1.读取命令行输入
-        # 例如输入 main.py ./Proteins ./Ligands/aspirin.pdbqt
-        if not check_cmd_para(sys.argv):
-            sys.exit()
-        else:
-            self.ligand = sys.argv[1]
-            self.proteins_dir = sys.argv[2]
-            self.output_path = sys.argv[3]
-
-        # print("选定的配体是：" + self.ligand)
-        # print("选定的受体目录是：" + self.proteins_dir)
+        # 输入的配体放在./Ligands文件夹
+        # 输入的受体放在./Proteins文件夹
+        # 输出在./Output文件夹
+        self.ligand = "." + os.sep + "Ligands"
+        self.proteins_dir = "." + os.sep + "Proteins"
+        pro_proteins_dir = "." + os.sep + "PreProteins"
+        self.output_path = "." + os.sep + "Output"
 
         # 2.将pdbqt文件放入文件夹
-        # 此时受体目录"./Proteins/pdb/preped.pdbqt
-        receptors_dir = proteins2dir(self.proteins_dir)
+        # 复制蛋白到另外的目录
+        copy_proteins(self.proteins_dir, pro_proteins_dir)
+        receptors_dir = proteins2dir(pro_proteins_dir)
 
         # 3.生成config.txt文件。
         # print("----------------------------------------准备生成对接配置文件----------------------------------------")
@@ -49,7 +45,7 @@ class Main:
         # 4.进行对接
         for receptor_dir in receptors_dir:
             # 此时receptor_dir = ".\Proteins\01
-            current_receptor = receptor_dir.split(os.sep)[-1]
+            # current_receptor = receptor_dir.split(os.sep)[-1]
             # print("------------------------------------------------------------")
             # print("准备对接：" + current_receptor)
             # print("------------------------------------------------------------")

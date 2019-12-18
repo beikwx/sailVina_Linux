@@ -114,6 +114,19 @@ def get_best_scores(scores_dict):
     return tmp_dict
 
 
+def copy_proteins(src_dir, dst_dir):
+    """
+    将一个文件夹中的所有pdbqt格式的蛋白复制到另一个文件夹中
+    :param src_dir: 原始文件夹
+    :param dst_dir: 目标文件夹
+    """
+    for file in os.listdir(src_dir):
+        if file.endswith(".pdbqt"):
+            src_file = os.path.join(src_dir, file)
+            dst_file = os.path.join(dst_dir, file)
+            shutil.copy(src_file, dst_file)
+
+
 if __name__ == '__main__':
     pass
     # 本地调试代码
