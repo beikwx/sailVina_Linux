@@ -13,7 +13,8 @@ def pdbqt2dir(pdbqt_path):
     """
     # 1.创建文件夹
     pdbqt_dir = pdbqt_path[0:-6]
-    os.mkdir(pdbqt_dir)
+    if not os.path.exists(pdbqt_dir):
+        os.mkdir(pdbqt_dir)
     # 2.移动文件
     target_path = pdbqt_dir + os.sep + "preped.pdbqt"
     shutil.move(pdbqt_path, target_path)
@@ -70,7 +71,7 @@ def mk_output_dir(output_path):
     :param output_path: 目标文件夹
     """
     if not os.path.exists(output_path):
-        os.mkdir(output_path)
+        os.makedirs(output_path)
 
 
 def create_scores_file(output_file, scores_dict):
