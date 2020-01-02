@@ -1,4 +1,5 @@
 # coding: utf-8
+import sys
 
 from check import *
 from dock_processor import vina_dock
@@ -8,6 +9,7 @@ from file_processor import get_config_files, create_scores_file
 from file_processor import mk_output_dir
 from file_processor import get_best_scores, copy_proteins
 from Tools.read_scores import read_root_folder_scores
+from help_text import INFO
 
 
 class Main:
@@ -21,10 +23,13 @@ class Main:
 
         # 1.读取配体和受体
         # 输入的配体放在./Ligands文件夹
-        # 输入的受体放在./Proteins文件夹
+        # 指定受体文件夹
         # 输出在./Output文件夹
+        if not check_cmd_para(sys.argv):
+            print(INFO)
+            sys.exit()
         self.ligands = "." + os.sep + "Ligands"
-        self.proteins_dir = "." + os.sep + "Proteins"
+        self.proteins_dir = sys.argv[1]
         pre_proteins_dir = "." + os.sep + "PreProteins"
         self.output_path = "." + os.sep + "Output"
 

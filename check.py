@@ -9,18 +9,13 @@ def check_cmd_para(cmd_para):
     if len(cmd_para) == 1:
         return 0
     # 参数个数不正确
-    elif len(cmd_para) != 4:
+    elif len(cmd_para) != 2:
         return 0
     # 检查文件名
     else:
-        ligand = cmd_para[1]
-        proteins = cmd_para[2]
-        output_path = cmd_para[3]
-        if check_file(ligand) and check_dir(proteins) and check_dir(output_path):
-            if check_format(ligand, "pdbqt"):
-                return 1
-            else:
-                return 0
+        proteins = cmd_para[1]
+        if check_dir(proteins):
+            return 1
         else:
             return 0
 
