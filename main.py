@@ -3,7 +3,7 @@ import sys
 
 from check import *
 from dock_processor import vina_dock
-from pdb_processor import proteins2dir
+from pdb_processor import pdbqt2dir
 from pdb_processor import gen_config
 from file_processor import get_config_files, create_scores_file
 from file_processor import mk_output_dir
@@ -43,27 +43,34 @@ class Main:
             mk_output_dir(ligand_folder)
             # 将受体复制到配体文件夹中
             copy_proteins(self.proteins_dir, ligand_folder)
+            # 获取原始受体的名字
+            proteins_list = os.listdir(self.proteins_dir)
             # 将受体移动到文件夹中，改名
-            receptors_dir = proteins2dir(ligand_folder)
+            for protein in proteins_list:
+                if protein.endswith(".txt"):
+                    continue
+                pdbqt_path = os.path.join(ligand_folder, protein)
+                pdbqt2dir(pdbqt_path)
 
             # 3.生成config.txt文件。
-            for receptor_dir in receptors_dir:
-                receptor_file = receptor_dir + os.sep + "preped.pdbqt"
+            for receptor_dir in proteins_list:
+                if receptor_dir.endswith(".txt"):
+                    continue
+                receptor_file = ligand_folder + os.sep + receptor_dir[:-6] + os.sep + "preped.pdbqt"
                 gen_config(receptor_file, ligand_path)
 
             # 4.进行对接
-            for receptor_dir in receptors_dir:
-                # 此时receptor_dir = ".\PreProteins\ligand1\01
-                # current_receptor = receptor_dir.split(os.sep)[-1]
+            for receptor_dir in proteins_list:
+                # 此时receptor_dir = protein1.pdbqt
 
                 # 受体文件
-                receptor_file = receptor_dir + os.sep + "preped.pdbqt"
+                receptor_file = ligand_folder + os.sep + receptor_dir[:-6] + os.sep + "preped.pdbqt"
 
                 # 配置文件
-                config_files = get_config_files(receptor_dir)
+                config_files = get_config_files(ligand_folder + os.sep + receptor_dir[:-6])
 
                 # 创建输出文件夹
-                output_dir = self.output_path + os.sep + ligand[:-6] + os.sep + receptor_dir.split(os.sep)[-1]
+                output_dir = self.output_path + os.sep + ligand[:-6] + os.sep + receptor_dir[:-6]
                 mk_output_dir(output_dir)
 
                 output_count = 0
@@ -73,12 +80,6 @@ class Main:
                     vina_dock(ligand_path, receptor_file, config_file, output_file)
                     # print("------------------------------------------------------------")
                     output_count += 1
-
-                # 5.结果分析，输出分数最低的结果
-
-            best_dict = get_best_scores(read_root_folder_scores(self.output_path + os.sep + ligand[:-6], mode=1))
-            score_file = self.output_path + os.sep + ligand[:-6] + os.sep + "output.txt"
-            create_scores_file(score_file, best_dict)
 
 
 if __name__ == '__main__':

@@ -127,11 +127,7 @@ def copy_proteins(src_dir, dst_dir):
     for file in os.listdir(src_dir):
         if file.endswith(".pdbqt"):
             src_file = os.path.join(src_dir, file)
-            # dst_file = os.path.join(dst_dir, file)
-            try:
-                shutil.copy(src_file, dst_dir)
-            except FileNotFoundError:
-                return 
+            shutil.copy(src_file, dst_dir)
 
 
 if __name__ == '__main__':
