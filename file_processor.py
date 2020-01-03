@@ -124,16 +124,9 @@ def copy_proteins(src_dir, dst_dir):
     for file in os.listdir(src_dir):
         if file.endswith(".pdbqt"):
             src_file = os.path.join(src_dir, file)
-            dst_file = os.path.join(dst_dir, file)
-            shutil.copy(src_file, dst_file)
+            # dst_file = os.path.join(dst_dir, file)
+            shutil.copy(src_file, dst_dir)
 
 
 if __name__ == '__main__':
-    pass
-    # 本地调试代码
-    # pdbqt2dir("./Proteins/pdb (1).pdbqt")
-    # gen_config_file("./config.txt", 1, 1, 1, 20)
-    # get_config_files(r".\Proteins\01")
-    # r_dict = {'01': {'0.pdbqt': '-3.2', '1.pdbqt': '-3.1', '2.pdbqt': '-3.5'},
-    #           '02': {'0.pdbqt': '-3.2', '1.pdbqt': '-3.2', '2.pdbqt': '-3.2'}}
-    # print(get_best_scores(r_dict))
+    copy_proteins("./Proteins", "./PreProteins")
