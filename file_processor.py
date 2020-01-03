@@ -71,7 +71,10 @@ def mk_output_dir(output_path):
     :param output_path: 目标文件夹
     """
     if not os.path.exists(output_path):
-        os.makedirs(output_path)
+        try:
+            os.makedirs(output_path)
+        except FileExistsError:
+            return
 
 
 def create_scores_file(output_file, scores_dict):
@@ -125,7 +128,10 @@ def copy_proteins(src_dir, dst_dir):
         if file.endswith(".pdbqt"):
             src_file = os.path.join(src_dir, file)
             # dst_file = os.path.join(dst_dir, file)
-            shutil.copy(src_file, dst_dir)
+            try:
+                shutil.copy(src_file, dst_dir)
+            except FileNotFoundError:
+                return 
 
 
 if __name__ == '__main__':
