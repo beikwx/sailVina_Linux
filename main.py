@@ -8,7 +8,6 @@ from pdb_processor import gen_config
 from file_processor import get_config_files, create_scores_file
 from file_processor import mk_output_dir
 from file_processor import get_best_scores, copy_proteins
-from Tools.read_scores import read_root_folder_scores
 from help_text import INFO
 
 
