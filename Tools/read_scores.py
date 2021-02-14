@@ -38,7 +38,7 @@ def read_folder_scores(output_folder_path, mode=0):
     scores_dict = {}
     ligands = os.listdir(output_folder_path)
     for ligand in ligands:
-        if ligand.endswith(".pdbqt"):
+        if ligand.endswith(".pdbqt") and os.path.getsize(output_folder_path + os.sep + ligand):
             path = output_folder_path + os.sep + ligand
             scores = read_scores(path)
             if len(scores) == 0:

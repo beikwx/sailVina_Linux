@@ -130,5 +130,9 @@ def copy_proteins(src_dir, dst_dir):
             shutil.copy(src_file, dst_dir)
 
 
+def remove_dir(target_dir):
+    shutil.rmtree(target_dir)
+
+
 if __name__ == '__main__':
     copy_proteins("./Proteins", "./PreProteins")

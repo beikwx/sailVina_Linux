@@ -1,84 +1,88 @@
-# coding: utf-8
+import os
 import sys
 
-from check import *
+from check import check_cmd_para
 from dock_processor import vina_dock
-from pdb_processor import pdbqt2dir
-from pdb_processor import gen_config
-from file_processor import get_config_files, create_scores_file
-from file_processor import mk_output_dir
-from file_processor import get_best_scores, copy_proteins
+from file_processor import copy_proteins, mk_output_dir, pdbqt2dir, get_config_files, remove_dir
 from help_text import INFO
+from pdb_processor import gen_config
 
 
 class Main:
 
     def __init__(self):
-        self.ligands = None
-        self.proteins_dir = None
-        self.output_path = None
+        self.ligands = []
+        self.ligands_no_suf = []
+        self.proteins = []
+        self.proteins_no_suf = []
+        self.output_path = []
+        self.pre_proteins_path = []
 
     def run(self):
 
-        # 1.读取配体和受体
-        # 输入的配体放在./Ligands文件夹
-        # 指定受体文件夹
-        # 输出在./Output文件夹
+        # 0.检查参数
         if not check_cmd_para(sys.argv):
             print(INFO)
             sys.exit()
-        self.ligands = "." + os.sep + "Ligands"
-        self.proteins_dir = sys.argv[1]
-        pre_proteins_dir = "." + os.sep + "PreProteins"
-        self.output_path = "." + os.sep + "Output"
 
-        # 2.根据配体和受体建立文件夹。
-        for ligand in os.listdir(self.ligands):
-            if not ligand.endswith(".pdbqt"):
-                continue
-            ligand_path = "." + os.sep + "Ligands" + os.sep + ligand
-            ligand_folder = pre_proteins_dir + os.sep + ligand[:-6]
-            # 在PreProteins中创建文件夹，以配体命名
-            mk_output_dir(ligand_folder)
-            # 将受体复制到配体文件夹中
-            copy_proteins(self.proteins_dir, ligand_folder)
-            # 获取原始受体的名字
-            proteins_list = os.listdir(self.proteins_dir)
-            # 将受体移动到文件夹中，改名
-            for protein in proteins_list:
-                if protein.endswith(".txt"):
-                    continue
-                pdbqt_path = os.path.join(ligand_folder, protein)
-                pdbqt2dir(pdbqt_path)
+        # 1.文件路径获取
+        # 1.1读取配体文件名，筛选掉非pdbqt文件
+        for ligand in os.listdir("Ligands"):
+            if ligand.endswith(".pdbqt") and os.path.getsize("Ligands" + os.sep + ligand):
+                self.ligands.append(ligand)
+                self.ligands_no_suf.append(ligand[0:-6])
+                self.pre_proteins_path.append(os.path.join("PreProteins", ligand[0:-6]))
+        # print(self.ligands)
+        # print(self.ligands_no_suf)
+        # print(self.pre_proteins_path)
+        # 1.2读取受体文件名
+        protein_dir = sys.argv[1]
+        for protein in os.listdir(protein_dir):
+            if protein.endswith(".pdbqt") and os.path.getsize("Proteins" + os.sep + protein):
+                self.proteins.append(protein)
+                self.proteins_no_suf.append(protein[0:-6])
+        # print(self.proteins)
+        # print(self.proteins_no_suf)
+        # 1.3创建输出路径
+        for ligand in self.ligands_no_suf:
+            for protein in self.proteins_no_suf:
+                output_path = os.path.join("Output", ligand, protein)
+                mk_output_dir(output_path)
+                self.output_path.append(output_path)
+        # print(self.output_path)
 
-            # 3.生成config.txt文件。
-            for receptor_dir in proteins_list:
-                if receptor_dir.endswith(".txt"):
-                    continue
-                receptor_file = ligand_folder + os.sep + receptor_dir[:-6] + os.sep + "preped.pdbqt"
-                gen_config(receptor_file, ligand_path)
+        # 2.准备文件
+        # 2.1移动文件,建文件夹
+        for path in self.pre_proteins_path:
+            mk_output_dir(path)
+            copy_proteins(protein_dir, path)
+            for protein in self.proteins:
+                pdbqt2dir(os.path.join(path, protein))
 
-            # 4.进行对接
-            for receptor_dir in proteins_list:
-                # 此时receptor_dir = protein1.pdbqt
+        # 2.2生成config文件
+        for ligand in self.ligands_no_suf:
+            for protein in self.proteins_no_suf:
+                receptor_file = "PreProteins" + os.sep + ligand + os.sep + protein + os.sep + "preped.pdbqt"
+                gen_config(receptor_file, "Ligands" + os.sep + ligand + ".pdbqt")
 
-                # 受体文件
-                receptor_file = ligand_folder + os.sep + receptor_dir[:-6] + os.sep + "preped.pdbqt"
-
-                # 配置文件
-                config_files = get_config_files(ligand_folder + os.sep + receptor_dir[:-6])
-
-                # 创建输出文件夹
-                output_dir = self.output_path + os.sep + ligand[:-6] + os.sep + receptor_dir[:-6]
-                mk_output_dir(output_dir)
-
+        # 2.3进行对接
+        # 2.1配体文件
+        for ligand in self.ligands_no_suf:
+            ligand_file = "Ligands" + os.sep + ligand + ".pdbqt"
+            # 2.2受体文件
+            for protein in self.proteins_no_suf:
+                receptor_file = "PreProteins" + os.sep + ligand + os.sep + protein + os.sep + "preped.pdbqt"
+                # 2.3配置文件
+                config_files = get_config_files("PreProteins" + os.sep + ligand + os.sep + protein)
+                # 2.4输出文件
                 output_count = 0
                 for config_file in config_files:
-                    output_file = output_dir + os.sep + str(output_count) + ".pdbqt"
-                    # print("当前配置文件:" + config_file)
-                    vina_dock(ligand_path, receptor_file, config_file, output_file)
-                    # print("------------------------------------------------------------")
+                    output_file = "Output" + os.sep + ligand + os.sep + protein + os.sep + str(output_count) + ".pdbqt"
+                    # 2.5对接
+                    vina_dock(ligand_file, receptor_file, config_file, output_file)
                     output_count += 1
+                # 2.6删除受体文件夹
+                remove_dir("PreProteins" + os.sep + ligand + os.sep + protein)
 
 
 if __name__ == '__main__':

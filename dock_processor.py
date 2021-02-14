@@ -10,13 +10,14 @@ def vina_dock(ligand, protein, config, output):
     :param protein: 受体文件名 ./Proteins/pdb1/preped.pdbqt
     :param config: 配置文件名 ./Proteins/pdb1/config1.pdbqt
     :param output:输出文件名 ./Output/pdb1/01.pdbqt
+    :return: 返回1表示正常
     """
 
     cmd = "vina --ligand %s --receptor %s --config %s --out %s" % \
           (ligand, protein, config, output)
 
     # print(cmd)
-    os.system(cmd)
+    return os.system(cmd)
 
 
 if __name__ == '__main__':
